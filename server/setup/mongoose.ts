@@ -67,7 +67,7 @@ function connectToDb() {
   };
 
   // Connect and return promise.
-  return mongoose.connect(DATABASE_URL, mongoConnectOpts).catch(function(err) {
+  return mongoose.connect(DATABASE_URL, mongoConnectOpts).catch(function(err: any) {
     // To avoid promise not handled exception.
     console.error('Unable to connect MongoDB. If problem persists, please restart the server. Error: ' + err);
   });

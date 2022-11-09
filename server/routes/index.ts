@@ -3,8 +3,8 @@
 */
 'use strict';
 
-let express = require('express');
-let router = express.Router();
+import { Router } from 'express';
+let router = Router();
 
 // To confirm setup only.
 router.get('/', function(req, res) { return res.send('Hello world!'); });
