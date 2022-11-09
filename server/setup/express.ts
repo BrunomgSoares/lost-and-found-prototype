@@ -1,13 +1,13 @@
 /**
 * Setup Express app.
 */
-'use strict';
+
 
 import { Express } from 'express';
 
-let helmet = require('helmet');
-let methodOverride = require('method-override');
-let express = require('express');
+const helmet = require('helmet');
+const methodOverride = require('method-override');
+const express = require('express');
 
 /**
 * Sets up Express app.
@@ -21,4 +21,4 @@ export default function setup(app: Express) {
   app.use(express.json());
 
   return app;
-};
+}
