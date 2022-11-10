@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { ProductService } from '../../services/product.service';
 import { ICreateProductDTO } from '../../dto/create-product.dto';
 import { IDeleteProductDTO } from '../../dto/delete-product.dto';
+import { IProductDTO } from '../../dto/product.dto';
 
 // The product service instantation, could be improved to use Dependency Injection
 const productService = new ProductService();
@@ -18,11 +19,30 @@ export class ProductController {
    * @param res response object
    * @returns an array of product objects found
    */
-  async listAllProducts(req: Request, res: Response) {
+  async listProducts(req: Request, res: Response) {
     try {
-      const product = await productService.listProducts();
+      if (req.query) {
+        const lostAtString = req.query.lostAt?.toString();
+        if (lostAtString) {
+          const lostAt = new Date(lostAtString);
 
-      return res.json(product);
+          const productQuery: IProductDTO = {
+            type: req.query.type?.toString(),
+            size: req.query.size?.toString(),
+            brand: req.query.brand?.toString(),
+            model: req.query.model?.toString(),
+            color: req.query.color?.toString(),
+            lostAt,
+          };
+
+          const products = await productService.queryProducts(productQuery);
+          return res.json(products);
+        }
+      }
+
+      const products = await productService.listAllProducts();
+
+      return res.json(products);
     }
     catch (e: any) {
       return res.status(400).json({ message: e.message });
@@ -41,6 +61,8 @@ export class ProductController {
       const productDTO = req.body as ICreateProductDTO;
 
       const product = await productService.createProduct(productDTO);
+
+      if (!product) return res.status(400).json({ message: 'There was a problem with your request!' });
 
       return res.json(product);
     }

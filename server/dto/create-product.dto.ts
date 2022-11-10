@@ -3,6 +3,8 @@
  * Separates our business logic layer from the Application Controllers
  */
 export interface ICreateProductDTO {
+    type: string,
+    size: string,
     brand: string,
     model?: string,
     color: string,

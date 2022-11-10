@@ -1,7 +1,9 @@
+import moment from 'moment';
 import { ICreateProductDTO } from '../dto/create-product.dto';
 import { IProduct } from '../models/product/product.interface';
 import ProductRepository from '../models/product/product.model';
 import { IDeleteProductDTO } from '../dto/delete-product.dto';
+import { IProductDTO } from '../dto/product.dto';
 
 /**
  * Product Service layer used to access the application data layer.
@@ -13,8 +15,38 @@ export class ProductService {
    *
    * @returns an array of existing products
    */
-  async listProducts(): Promise<IProduct[]> {
+  async listAllProducts(): Promise<IProduct[]> {
     const products: IProduct[] = await ProductRepository.find();
+
+    return products;
+  }
+
+  /**
+   * Querys products existing in the database product repository given a product characteristics.
+   * Uses the input lost at date as a date range
+   *
+   * @returns an array of existing products
+   */
+  async queryProducts(productDTO: IProductDTO): Promise<IProduct[]> {
+    const startDateRange = moment(productDTO.lostAt).subtract('1', 'days').toDate();
+    const endDateRange = moment(productDTO.lostAt).add('1', 'days').toDate();
+
+    const queryFields: { [key: string]: any } = {};
+
+    // Reduce productDTO undefined fields with adition to lostAt into queryFields
+    Object.keys(productDTO).forEach((k) => {
+      if (productDTO[k as keyof typeof productDTO] !== undefined && k !== 'lostAt') queryFields[k] = productDTO[k as keyof IProductDTO]?.toString().toUpperCase();
+    });
+
+    const products: IProduct[] = await ProductRepository.find().and([
+      {
+        lostAt: {
+          $gte: startDateRange,
+          $lte: endDateRange,
+        },
+      },
+      queryFields,
+    ]);
 
     return products;
   }

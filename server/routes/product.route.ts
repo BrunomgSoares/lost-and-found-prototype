@@ -7,6 +7,7 @@ import { Router } from 'express';
 import { CreateProductJoi } from '../validators/create-product.validator';
 import { ProductController } from '../controllers/product/product.controller';
 import { DeleteProductJoi } from '../validators/delete-product.validator';
+import { ProductQueryJoi } from '../validators/product-query.validator';
 
 const route = Router();
 
@@ -17,7 +18,10 @@ const productController = new ProductController();
  */
 route.get(
   '/',
-  productController.listAllProducts,
+  celebrate({
+    query: ProductQueryJoi,
+  }),
+  productController.listProducts,
 );
 
 /**
