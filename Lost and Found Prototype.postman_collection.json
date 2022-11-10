@@ -31,7 +31,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"type\": \"wallet\",\r\n    \"size\": \"small\",\r\n    \"brand\": \"camel\",\r\n    \"color\": \"black\",\r\n    \"lostAt\": \"2022-11-09 22:06:00\"\r\n}",
+					"raw": "{\r\n    \"type\": \"phone\",\r\n    \"size\": \"small\",\r\n    \"model\": \"11\",\r\n    \"brand\": \"iphone\",\r\n    \"color\": \"black\",\r\n    \"lostAt\": \"2022-11-01 22:15:00\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -65,7 +65,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"\"\r\n}",
+					"raw": "{\r\n    \"id\": \"636c240eccbc60401031f1fa\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -80,6 +80,67 @@
 					"port": "3000",
 					"path": [
 						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Products by Keywords",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/product?lostAt=2022-11-01&brand=samsung&type=phone",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"product"
+					],
+					"query": [
+						{
+							"key": "lostAt",
+							"value": "2022-11-01"
+						},
+						{
+							"key": "brand",
+							"value": "samsung"
+						},
+						{
+							"key": "type",
+							"value": "phone"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Products by Message Prompt",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/product/search-prompt?prompt=I lost my iphone 11 black phone&lostAt=2022-11-01T23:15",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"product",
+						"search-prompt"
+					],
+					"query": [
+						{
+							"key": "prompt",
+							"value": "I lost my iphone 11 black phone"
+						},
+						{
+							"key": "lostAt",
+							"value": "2022-11-01T23:15"
+						}
 					]
 				}
 			},

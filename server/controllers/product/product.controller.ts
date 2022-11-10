@@ -50,6 +50,33 @@ export class ProductController {
   }
 
   /**
+   * Searches for a product based on the message prompt
+   *
+   * @param req request object
+   * @param res response objcet
+   * @returns an list of products found similar to the prompt message indications
+   */
+  async productsPromptSearch(req: Request, res: Response) {
+    try {
+      const { prompt } = req.query;
+      let { lostAt }: any = req.query;
+      if (lostAt && prompt) {
+        lostAt = new Date(lostAt.toString());
+
+        const product = await productService.productsPromptSearch(prompt.toString(), lostAt);
+
+        if (!product) return res.status(400).json({ message: 'There was a problem with your request!' });
+
+        return res.json(product);
+      }
+      return res.status(400).json({ message: 'There was a problem with your request!' });
+    }
+    catch (e: any) {
+      return res.status(400).json({ message: e.message });
+    }
+  }
+
+  /**
    * Creates a product given its request body through the ProductService
    *
    * @param req request object

@@ -4,6 +4,7 @@ import { IProduct } from '../models/product/product.interface';
 import ProductRepository from '../models/product/product.model';
 import { IDeleteProductDTO } from '../dto/delete-product.dto';
 import { IProductDTO } from '../dto/product.dto';
+import { bestResult, preparePromptMessage } from '../utils/search.utils';
 
 /**
  * Product Service layer used to access the application data layer.
@@ -49,6 +50,29 @@ export class ProductService {
     ]);
 
     return products;
+  }
+
+  /**
+   * Searches for a product based on the message prompt and lostAt date
+   *
+   * @param prompt the user inputed prompt message
+   * @param lostAt the user inputed lost at date
+   * @returns the most similar product found or a list of products in case of many
+   */
+  async productsPromptSearch(prompt: string, lostAt: Date): Promise<IProduct[]> {
+    const startDateRange = moment(lostAt).subtract('1', 'hour').toDate();
+    const endDateRange = moment(lostAt).add('1', 'hour').toDate();
+
+    const message = preparePromptMessage(prompt);
+
+    const products = await ProductRepository.find({
+      lostAt: {
+        $gte: startDateRange,
+        $lte: endDateRange,
+      },
+    });
+
+    return bestResult(message, products);
   }
 
   /**

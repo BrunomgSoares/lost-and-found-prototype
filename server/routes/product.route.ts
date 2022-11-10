@@ -8,13 +8,14 @@ import { CreateProductJoi } from '../validators/create-product.validator';
 import { ProductController } from '../controllers/product/product.controller';
 import { DeleteProductJoi } from '../validators/delete-product.validator';
 import { ProductQueryJoi } from '../validators/product-query.validator';
+import { ProductPromptSearchJoi } from '../validators/product-search-promp.validator';
 
 const route = Router();
 
 const productController = new ProductController();
 
 /**
- * Get All products route definition
+ * Get products route definition
  */
 route.get(
   '/',
@@ -22,6 +23,17 @@ route.get(
     query: ProductQueryJoi,
   }),
   productController.listProducts,
+);
+
+/**
+ * Search products based on the message prompt route definition
+ */
+route.get(
+  '/search-prompt',
+  celebrate({
+    query: ProductPromptSearchJoi,
+  }),
+  productController.productsPromptSearch,
 );
 
 /**
