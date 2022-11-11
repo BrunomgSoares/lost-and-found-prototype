@@ -1,0 +1,103 @@
+[{
+  "_id": {
+    "$oid": "636d9d21a7d1a91048a7a2cc"
+  },
+  "type": "WALLET",
+  "size": "SMALL",
+  "brand": "CAMEL",
+  "color": "BROWN",
+  "lostAt": {
+    "$date": {
+      "$numberLong": "1668038400000"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "636d9d5fa7d1a91048a7a2cf"
+  },
+  "type": "BACKPACK",
+  "size": "MEDIUM",
+  "brand": "NORTH FACE",
+  "color": "BLACK",
+  "lostAt": {
+    "$date": {
+      "$numberLong": "1667829600000"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "636da1294565284680d70904"
+  },
+  "type": "EARRINGS",
+  "size": "SMALL",
+  "brand": "PARFOIS",
+  "color": "SILVER",
+  "lostAt": {
+    "$date": {
+      "$numberLong": "1668088800000"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "636da1c74565284680d70907"
+  },
+  "type": "PHONE",
+  "size": "SMALL",
+  "model": "11",
+  "brand": "IPHONE",
+  "color": "BLACK",
+  "lostAt": {
+    "$date": {
+      "$numberLong": "1668063600000"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "636da1db4565284680d70909"
+  },
+  "type": "PHONE",
+  "size": "SMALL",
+  "model": "S4",
+  "brand": "SAMSUNG",
+  "color": "BLACK",
+  "lostAt": {
+    "$date": {
+      "$numberLong": "1667340900000"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "636da2374565284680d7090c"
+  },
+  "type": "PHONE",
+  "size": "SMALL",
+  "model": "11",
+  "brand": "IPHONE",
+  "color": "WHITE",
+  "lostAt": {
+    "$date": {
+      "$numberLong": "1668065400000"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "636da24c4565284680d7090f"
+  },
+  "type": "PHONE",
+  "size": "SMALL",
+  "model": "11",
+  "brand": "IPHONE",
+  "color": "BLACK",
+  "lostAt": {
+    "$date": {
+      "$numberLong": "1667340900000"
+    }
+  },
+  "__v": 0
+}]

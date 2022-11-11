@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { ProductService } from '../../services/product.service';
-import { ICreateProductDTO } from '../../dto/create-product.dto';
-import { IDeleteProductDTO } from '../../dto/delete-product.dto';
-import { IProductDTO } from '../../dto/product.dto';
+import { ICreateProductDTO } from '../../dto/product/create-product.dto';
+import { IDeleteProductDTO } from '../../dto/product/delete-product.dto';
+import { IProductDTO } from '../../dto/product/product.dto';
 
 // The product service instantation, could be improved to use Dependency Injection
 const productService = new ProductService();
@@ -45,7 +45,7 @@ export class ProductController {
       return res.json(products);
     }
     catch (e: any) {
-      return res.status(400).json({ message: e.message });
+      return res.status(500).json({ message: e.message });
     }
   }
 
@@ -72,7 +72,7 @@ export class ProductController {
       return res.status(400).json({ message: 'There was a problem with your request!' });
     }
     catch (e: any) {
-      return res.status(400).json({ message: e.message });
+      return res.status(500).json({ message: e.message });
     }
   }
 
@@ -91,10 +91,10 @@ export class ProductController {
 
       if (!product) return res.status(400).json({ message: 'There was a problem with your request!' });
 
-      return res.json(product);
+      return res.status(201).json(product);
     }
     catch (e: any) {
-      return res.status(400).json({ message: e.message });
+      return res.status(500).json({ message: e.message });
     }
   }
 
@@ -107,7 +107,9 @@ export class ProductController {
    */
   async deleteProduct(req: Request, res: Response) {
     try {
-      const deleteProductDTO = req.body as IDeleteProductDTO;
+      const deleteProductDTO: IDeleteProductDTO = {
+        id: req.params.id,
+      };
 
       const deletedProduct = await productService.deleteProductById(deleteProductDTO);
 
@@ -116,7 +118,7 @@ export class ProductController {
       return res.json({ message: 'Product successfully deleted', id: deleteProductDTO.id });
     }
     catch (e: any) {
-      return res.status(400).json({ message: e.message });
+      return res.status(500).json({ message: e.message });
     }
   }
 }

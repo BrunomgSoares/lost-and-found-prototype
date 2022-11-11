@@ -7,31 +7,32 @@
 	},
 	"item": [
 		{
-			"name": "Get All Products",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:3000/product",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"product"
-					]
+			"name": "Sign Up User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 201 - User Created\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Returned message is correct\", function () {\r",
+							"    pm.expect(responseJson.message).to.eql(\"User registered successfully\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "Post Product",
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"type\": \"phone\",\r\n    \"size\": \"small\",\r\n    \"model\": \"11\",\r\n    \"brand\": \"iphone\",\r\n    \"color\": \"black\",\r\n    \"lostAt\": \"2022-11-01 22:15:00\"\r\n}",
+					"raw": "{\r\n    \"username\": \"{{user_username}}\",\r\n    \"password\": \"{{user_password}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -39,33 +40,44 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/product",
+					"raw": "{{auth_endpoint}}/sign-up",
 					"host": [
-						"localhost"
+						"{{auth_endpoint}}"
 					],
-					"port": "3000",
 					"path": [
-						"product"
+						"sign-up"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Delete a Product",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text",
-						"disabled": true
+			"name": "Sign Up Duplicate User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400 - Duplicate User\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Returned message is correct\", function () {\r",
+							"    pm.expect(responseJson.message).to.eql(\"Username is already in use\");\r",
+							"});"
+						],
+						"type": "text/javascript"
 					}
-				],
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"636c240eccbc60401031f1fa\"\r\n}",
+					"raw": "{\r\n    \"username\": \"{{user_username}}\",\r\n    \"password\": \"{{user_password}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -73,13 +85,248 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/product",
+					"raw": "{{auth_endpoint}}/sign-up",
 					"host": [
-						"localhost"
+						"{{auth_endpoint}}"
 					],
-					"port": "3000",
 					"path": [
-						"product"
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign In User - Wrong Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400 - Wrong Password\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Returned message is correct\", function () {\r",
+							"    pm.expect(responseJson.message).to.eql(\"Invalid credentials\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{user_username}}\",\r\n    \"password\": \"wrong-password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{auth_endpoint}}/sign-in",
+					"host": [
+						"{{auth_endpoint}}"
+					],
+					"path": [
+						"sign-in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign In User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200 - Sign in successful\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Returned message is correct\", function () {\r",
+							"    pm.expect(responseJson.message).to.eql(\"Sign up successful\");\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"access_token\", responseJson.accessToken);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{user_username}}\",\r\n    \"password\": \"{{user_password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{auth_endpoint}}/sign-in",
+					"host": [
+						"{{auth_endpoint}}"
+					],
+					"path": [
+						"sign-in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product - Fields Missing",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 - Missing fields\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{access_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"{{product_type}}\",\r\n    \"size\": \"{{product_size}}\",\r\n    \"brand\": \"{{product_brand}}\",\r\n    \"color\": \"{{product_color}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{product_endpoint}}",
+					"host": [
+						"{{product_endpoint}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 201 - Product Created\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Returned product is correct\", function () {\r",
+							"    pm.expect(responseJson.type).to.eql(\"PHONE\");\r",
+							"    pm.expect(responseJson.size).to.eql(\"SMALL\");\r",
+							"    pm.expect(responseJson.model).to.eql(\"11\");\r",
+							"    pm.expect(responseJson.brand).to.eql(\"IPHONE\");\r",
+							"    pm.expect(responseJson.color).to.eql(\"BLACK\");\r",
+							"    pm.expect(responseJson.lostAt).to.eql(\"2022-11-01T22:15:00.000Z\");\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"product_id\", responseJson._id);\r",
+							"\r",
+							"console.log(pm.environment.get(\"product_id\"));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{access_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"{{product_type}}\",\r\n    \"size\": \"{{product_size}}\",\r\n    \"brand\": \"{{product_brand}}\",\r\n    \"model\": \"{{product_model}}\",\r\n    \"color\": \"{{product_color}}\",\r\n    \"lostAt\": \"{{product_lostAt}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{product_endpoint}}",
+					"host": [
+						"{{product_endpoint}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200 - Product Retrieved\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Returned product is correct\", function () {\r",
+							"    pm.expect(responseJson[0].type).to.eql(\"PHONE\");\r",
+							"    pm.expect(responseJson[0].size).to.eql(\"SMALL\");\r",
+							"    pm.expect(responseJson[0].model).to.eql(\"11\");\r",
+							"    pm.expect(responseJson[0].brand).to.eql(\"IPHONE\");\r",
+							"    pm.expect(responseJson[0].color).to.eql(\"BLACK\");\r",
+							"    pm.expect(responseJson[0].lostAt).to.eql(\"2022-11-01T22:15:00.000Z\");\r",
+							"});\r",
+							"\r",
+							"console.log(pm.environment.get(\"product_id\"));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{product_endpoint}}",
+					"host": [
+						"{{product_endpoint}}"
 					]
 				}
 			},
@@ -87,30 +334,50 @@
 		},
 		{
 			"name": "Search Products by Keywords",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200 - Product Retrieved\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Returned product is correct\", function () {\r",
+							"    pm.expect(responseJson[0].type).to.eql(\"PHONE\");\r",
+							"    pm.expect(responseJson[0].size).to.eql(\"SMALL\");\r",
+							"    pm.expect(responseJson[0].model).to.eql(\"11\");\r",
+							"    pm.expect(responseJson[0].brand).to.eql(\"IPHONE\");\r",
+							"    pm.expect(responseJson[0].color).to.eql(\"BLACK\");\r",
+							"    pm.expect(responseJson[0].lostAt).to.eql(\"2022-11-01T22:15:00.000Z\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/product?lostAt=2022-11-01&brand=samsung&type=phone",
+					"raw": "{{product_endpoint}}?lostAt={{product_lostAt}}&brand={{product_brand}}&type={{product_type}}",
 					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"product"
+						"{{product_endpoint}}"
 					],
 					"query": [
 						{
 							"key": "lostAt",
-							"value": "2022-11-01"
+							"value": "{{product_lostAt}}"
 						},
 						{
 							"key": "brand",
-							"value": "samsung"
+							"value": "{{product_brand}}"
 						},
 						{
 							"key": "type",
-							"value": "phone"
+							"value": "{{product_type}}"
 						}
 					]
 				}
@@ -119,32 +386,181 @@
 		},
 		{
 			"name": "Search Products by Message Prompt",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200 - Product Retrieved\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Returned product is correct\", function () {\r",
+							"    pm.expect(responseJson[0].type).to.eql(\"PHONE\");\r",
+							"    pm.expect(responseJson[0].size).to.eql(\"SMALL\");\r",
+							"    pm.expect(responseJson[0].model).to.eql(\"11\");\r",
+							"    pm.expect(responseJson[0].brand).to.eql(\"IPHONE\");\r",
+							"    pm.expect(responseJson[0].color).to.eql(\"BLACK\");\r",
+							"    pm.expect(responseJson[0].lostAt).to.eql(\"2022-11-01T22:15:00.000Z\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/product/search-prompt?prompt=I lost my iphone 11 black phone&lostAt=2022-11-01T23:15",
+					"raw": "{{search_message_endpoint}}?prompt={{prompt_message}}&lostAt={{product_lostAt}}",
 					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"product",
-						"search-prompt"
+						"{{search_message_endpoint}}"
 					],
 					"query": [
 						{
 							"key": "prompt",
-							"value": "I lost my iphone 11 black phone"
+							"value": "{{prompt_message}}"
 						},
 						{
 							"key": "lostAt",
-							"value": "2022-11-01T23:15"
+							"value": "{{product_lostAt}}"
 						}
 					]
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Delete a Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200 - Product Deleted\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is correct\", function () {\r",
+							"    pm.expect(responseJson.message).to.eql(\"Product successfully deleted\");\r",
+							"    pm.expect(responseJson.id).to.eql(pm.environment.get(\"product_id\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{access_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{product_endpoint}}/{{product_id}}",
+					"host": [
+						"{{product_endpoint}}"
+					],
+					"path": [
+						"{{product_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_endpoint",
+			"value": "localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "search_message_endpoint",
+			"value": "{{base_endpoint}}/product/search",
+			"type": "string"
+		},
+		{
+			"key": "product_endpoint",
+			"value": "{{base_endpoint}}/product",
+			"type": "string"
+		},
+		{
+			"key": "product_type",
+			"value": "phone",
+			"type": "string"
+		},
+		{
+			"key": "product_model",
+			"value": "11",
+			"type": "string"
+		},
+		{
+			"key": "product_brand",
+			"value": "iphone",
+			"type": "string"
+		},
+		{
+			"key": "product_size",
+			"value": "small",
+			"type": "string"
+		},
+		{
+			"key": "product_color",
+			"value": "black",
+			"type": "string"
+		},
+		{
+			"key": "product_lostAt",
+			"value": "2022-11-01T22:15:00.000Z",
+			"type": "string"
+		},
+		{
+			"key": "prompt_message",
+			"value": "I lost my iphone 11 black phone",
+			"type": "string"
+		},
+		{
+			"key": "auth_endpoint",
+			"value": "{{base_endpoint}}/auth",
+			"type": "string"
+		},
+		{
+			"key": "user_username",
+			"value": "Bruno",
+			"type": "string"
+		},
+		{
+			"key": "user_password",
+			"value": "verysafepassword",
+			"type": "string"
 		}
 	]
 }

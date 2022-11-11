@@ -7,6 +7,7 @@ export const DeleteProductJoi = Joi.object({
   id: Joi.string()
     .required()
     .empty()
+    .length(24)
     .messages({
       'string.base': '"id" should be a \'text\'',
       'string.empty': '"id" cannot be an empty field',

@@ -1,9 +1,9 @@
 import moment from 'moment';
-import { ICreateProductDTO } from '../dto/create-product.dto';
+import { ICreateProductDTO } from '../dto/product/create-product.dto';
 import { IProduct } from '../models/product/product.interface';
 import ProductRepository from '../models/product/product.model';
-import { IDeleteProductDTO } from '../dto/delete-product.dto';
-import { IProductDTO } from '../dto/product.dto';
+import { IDeleteProductDTO } from '../dto/product/delete-product.dto';
+import { IProductDTO } from '../dto/product/product.dto';
 import { bestResult, preparePromptMessage } from '../utils/search.utils';
 
 /**

@@ -10,10 +10,13 @@
     "test-win": "set NODE_ENV=test&& mocha --recursive --inspect --exit test"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "bcrypt": "^5.1.0",
     "body-parser": "1.20.1",
     "celebrate": "15.0.1",
     "express": "4.17.1",
     "helmet": "4.5.0",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "4.17.21",
     "method-override": "3.0.0",
     "moment": "2.29.4",
@@ -25,6 +28,7 @@
   "devDependencies": {
     "@types/express": "4.17.14",
     "@types/helmet": "4.0.0",
+    "@types/jsonwebtoken": "^8.5.9",
     "@types/mongodb": "4.0.7",
     "@types/node": "18.11.9",
     "@typescript-eslint/eslint-plugin": "5.27.1",

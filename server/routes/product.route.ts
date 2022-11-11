@@ -9,6 +9,7 @@ import { ProductController } from '../controllers/product/product.controller';
 import { DeleteProductJoi } from '../validators/delete-product.validator';
 import { ProductQueryJoi } from '../validators/product-query.validator';
 import { ProductPromptSearchJoi } from '../validators/product-search-promp.validator';
+import { verifyJWT } from './middlewares/auth.middleware';
 
 const route = Router();
 
@@ -29,7 +30,7 @@ route.get(
  * Search products based on the message prompt route definition
  */
 route.get(
-  '/search-prompt',
+  '/search',
   celebrate({
     query: ProductPromptSearchJoi,
   }),
@@ -41,9 +42,12 @@ route.get(
  */
 route.post(
   '/',
-  celebrate({
-    body: CreateProductJoi,
-  }),
+  [
+    verifyJWT,
+    celebrate({
+      body: CreateProductJoi,
+    }),
+  ],
   productController.createProduct,
 );
 
@@ -51,10 +55,13 @@ route.post(
  * Delete a product by id route definition
  */
 route.delete(
-  '/',
-  celebrate({
-    body: DeleteProductJoi,
-  }),
+  '/:id',
+  [
+    verifyJWT,
+    celebrate({
+      params: DeleteProductJoi,
+    }),
+  ],
   productController.deleteProduct,
 );
 
